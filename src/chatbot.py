@@ -45,15 +45,50 @@ def get_account_number() -> int:
     if prompt.isdigit():
         result = int(prompt)
         if result in ACCOUNTS:
-            #print(str(result)) #used to confirm output while writing
             return result
         else:
             raise ValueError("Account number entered does not exist.")
     else:
         raise TypeError("Account number must be an int type.")
     
+def get_amount() -> float:    
+    """Requests deposit amount and runs exceptions when input is either not a float or int, ~
+    ~ or if deposit is negative in value
 
+    Args:
+        deposit_input = float(input("Please enter amount: ")):
+            
+            This is equal to the value inputted by user, following the message prompt
+
+        ValueError:
+            If value is <= to zero exception will occur
         
+        TypeError:
+            If value is not int or float exception will occur
+    """
+    try:
+        deposit_input = float(input("Please enter amount: "))
+        if deposit_input <= 0:
+            raise TypeError("Amount must be a value greater than zero.")
+        else:
+            print(deposit_input)
+            return deposit_input
+    #Had to invert the Value and type error function as I could not figure out another method and baseline was always ValueError for TypeError entry
+    except ValueError as e:
+        e = "Amount must be a numeric type"
+        print(e)
+    except TypeError as e:
+        e = "Amount must be a value greater than zero."
+        print(e)
+    
+        
+get_amount()
+
+
+
+
+
+
 def chatbot():
     """Performs the Chatbot functionality."""
     COMPANY_NAME = "PiXELL River Financial"
