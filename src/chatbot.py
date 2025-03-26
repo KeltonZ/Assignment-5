@@ -51,8 +51,9 @@ def get_account_number() -> int:
     else:
         raise TypeError("Account number must be an int type.")
     
-def get_amount() -> float:    
-    """Requests deposit amount and runs exceptions when input is either not a float or int, ~
+def get_amount() -> float:
+    """
+    Requests deposit amount and runs exceptions when input is either not a float or int, ~
     ~ or if deposit is negative in value
 
     Args:
@@ -75,18 +76,7 @@ def get_amount() -> float:
             return deposit_input
     #Had to invert the Value and type error function as I could not figure out another method and baseline was always ValueError for TypeError entry
     except ValueError as e:
-        e = "Amount must be a numeric type"
-        print(e)
-    except TypeError as e:
-        e = "Amount must be a value greater than zero."
-        print(e)
-    
-        
-get_amount()
-
-
-
-
+        raise ValueError("Amount must be a numeric type.") from e
 
 
 def chatbot():
