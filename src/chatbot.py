@@ -78,6 +78,12 @@ def get_amount() -> float:
     except ValueError as e:
         raise ValueError("Amount must be a numeric type.") from e
 
+def get_balance(account_number: int) -> float:
+    """References get_account_num function and accesses relative key-value pair then prints current balance"""
+    account_number = get_account_number()
+    account_balance = ACCOUNTS[account_number]['balance']
+    return f"Your current balance for account {account_number} is {'${:,.2f}'.format(account_balance)}"
+   
 
 def chatbot():
     """Performs the Chatbot functionality."""

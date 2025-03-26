@@ -16,7 +16,7 @@ import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
 from src.chatbot import ACCOUNTS, VALID_TASKS
-from src.chatbot import get_account_number, get_amount
+from src.chatbot import get_account_number, get_amount, get_balance
 
 
 class Testchatbot(unittest.TestCase):
@@ -83,6 +83,45 @@ class Testchatbot(unittest.TestCase):
             result = get_amount()
             # Assert
             self.assertEqual(result, valid_output_int, valid_output_float)
+
+    def test_get_balance_param_not_int(self):
+        """Confirming TypeError exception handling when input is not int"""
+        # Arrange
+        account_number = "one"
+        with patch('builtins.input', side_effect=[account_number]):
+        
+        # Act & Assert
+            with self.assertRaises(TypeError) as context:
+                get_balance(account_number)
+            self.assertEqual(str(context.exception), "Account number must be an int type.")
+        
+    def test_get_balance_account_does_not_exist(self):
+        """Tests ValueError exception handling when account number does not match dictionary key"""
+        # Arrange
+        account_number = "123"
+        with patch('builtins.input', side_effect=[account_number]):
+
+        # Act & Assert
+            with self.assertRaises(ValueError) as context:
+                get_balance(account_number)
+            self.assertEqual(str(context.exception), "Account number entered does not exist.")
+    
+    def test_get_balance_valid(self):
+        """Tests valid account numbers"""
+        # Arrange
+        account_number_1 = "123456"
+        account_number = 123456
+        account_balance = 1000.0
+
+        expected = f"Your current balance for account {account_number} is {'${:,.2f}'.format(account_balance)}"
+
+        #account_balance_2 = "Your current balance for account 789012 is $2,000.00"
+
+        # Act & Assert
+        with patch('builtins.input', side_effect=[account_number_1]):
+            # Act
+            result = get_balance(account_number_1) 
             
-            
+            # Assert
+            self.assertEqual(result, expected)    
     
