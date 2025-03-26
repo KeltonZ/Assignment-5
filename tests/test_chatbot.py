@@ -16,7 +16,7 @@ import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
 from src.chatbot import ACCOUNTS, VALID_TASKS
-from src.chatbot import get_account_number, get_amount, get_balance
+from src.chatbot import get_account_number, get_amount, get_balance, make_deposit
 
 
 class Testchatbot(unittest.TestCase):
@@ -125,3 +125,65 @@ class Testchatbot(unittest.TestCase):
             # Assert
             self.assertEqual(result, expected)    
     
+    def test_make_deposit_not_int_type(self):
+        """Tests TypeError for account number input"""
+        # Arrange
+        account_number = "e"
+        with patch('builtins.input', side_effect=[account_number]):
+        
+        # Act & Assert
+            with self.assertRaises(TypeError) as context:
+                make_deposit(int, account_number)
+            self.assertEqual(str(context.exception), "Account number must be an int type.")
+
+    def test_make_deposit_not_in_dictionary(self):
+        """" Testing ValueError for ACCOUNTS key"""
+        # Arrange
+        account_number = "12345"
+        with patch('builtins.input', side_effect=[account_number]):
+            #Act & Assert
+            with self.assertRaises(ValueError) as context:
+                make_deposit(int, account_number)
+            self.assertEqual(str(context.exception), "Account number entered does not exist.")
+    
+    def test_make_deposit_lesser_or_equal_zero(self):
+        """"Testing TypeError when lesser than or equal to zero for amount"""
+        # Arrange
+        account_number = "123456"
+        amount = "-12"
+        with patch('builtins.input', side_effect=[account_number, amount]):
+            # Act & Assert
+            with self.assertRaises(TypeError) as context:
+                make_deposit(account_number, amount)
+            self.assertEqual(str(context.exception), "Amount must be a value greater than zero.")
+    
+    def test_make_deposit_not_numeric(self):
+        """testing ValueError for when input is not float or int"""
+        # Arrange
+        account_number = "123456"
+        amount = "e"
+        with patch('builtins.input', side_effect=[account_number, amount]):
+            # Act & Assert
+            with self.assertRaises(ValueError) as context:
+                make_deposit(account_number, amount)
+            self.assertEqual(str(context.exception), "Amount must be a numeric type.")
+    
+    def test_make_deposit_valid(self):
+        """Testing valid deposit inputs"""
+        # Arrange
+        account_number_1 = "123456"
+
+        amount_deposit = "1501.10"
+
+        amount = 1501.10
+
+        account_number = 123456
+        
+        expected = f"You have made a deposit of {'${:,.2f}'.format(amount)} to account {account_number}"
+        
+        with patch('builtins.input', side_effect=[account_number_1, amount_deposit]):
+            #Act
+            result = make_deposit(account_number_1, amount_deposit)
+
+            #Assert
+            self.assertEqual(result, expected)

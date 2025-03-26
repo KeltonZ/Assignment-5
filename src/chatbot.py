@@ -72,7 +72,6 @@ def get_amount() -> float:
         if deposit_input <= 0:
             raise TypeError("Amount must be a value greater than zero.")
         else:
-            print(deposit_input)
             return deposit_input
     #Had to invert the Value and type error function as I could not figure out another method and baseline was always ValueError for TypeError entry
     except ValueError as e:
@@ -83,7 +82,11 @@ def get_balance(account_number: int) -> float:
     account_number = get_account_number()
     account_balance = ACCOUNTS[account_number]['balance']
     return f"Your current balance for account {account_number} is {'${:,.2f}'.format(account_balance)}"
-   
+
+def make_deposit(account_number: int, amount: float):
+    account_number = get_account_number()
+    amount = get_amount()
+    return f"You have made a deposit of {'${:,.2f}'.format(amount)} to account {account_number}"
 
 def chatbot():
     """Performs the Chatbot functionality."""
