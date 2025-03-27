@@ -16,7 +16,7 @@ import unittest
 from unittest import TestCase, main
 from unittest.mock import patch
 from src.chatbot import ACCOUNTS, VALID_TASKS
-from src.chatbot import get_account_number, get_amount, get_balance, make_deposit
+from src.chatbot import get_account_number, get_amount, get_balance, make_deposit, get_task
 
 
 class Testchatbot(unittest.TestCase):
@@ -186,4 +186,41 @@ class Testchatbot(unittest.TestCase):
             result = make_deposit(account_number_1, amount_deposit)
 
             #Assert
+            self.assertEqual(result, expected)
+
+    def test_get_task_invalid_task(self):
+        """Testing ValueError exception handling when invalid input is given"""
+        # Arrange
+        invalid_task = "withdraw"
+
+        with patch('builtins.input', side_effect=["withdraw"]):
+            
+            # Act & Assert
+
+            with self.assertRaises(ValueError) as context:
+                get_task()
+            self.assertEqual(str(context.exception), f'"{invalid_task}" is an unknown task.')
+            
+    def test_get_task_valid_input(self):
+        """Testing the parameters of valid inputs, input should not be case sensitive"""
+        # Arrange
+        valid_input = "balance"
+
+        #Below are two commented out Variables to test alternative inputs
+        #valid_input_capital = "BALANCE" 
+
+        #valid_input_mixed = "BalAnCE"
+        
+        account_number = "123456"
+
+        account_balance = 1000.0
+
+        expected = expected = f"Your current balance for account {account_number} is {'${:,.2f}'.format(account_balance)}"
+
+        with patch('builtins.input', side_effect=[valid_input, account_number]):
+
+            # Act
+            result = get_task() 
+            
+            # Assert
             self.assertEqual(result, expected)
